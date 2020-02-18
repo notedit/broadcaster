@@ -82,14 +82,32 @@ func main() {
 		fmt.Println("HandleConnect")
 		channel := s.Request.FormValue("channel")
 		s.ID = randSeq(10)
-		s.User = 100
+		s.User = rand.Uint32()
 		broadcast.Join(channel, s)
+
+		msg := &broadcaster.Msg{
+			Channel: channel,
+			Event:   "connect",
+			Data:    map[string]interface{}{},
+			Exclude: s.User,
+		}
+
+		broadcast.Publish(msg)
 	})
 
 	m.HandleDisconnect(func(s *melody.Session) {
 		fmt.Println("HandleDisconnect")
 		channel := s.Request.FormValue("channel")
 		broadcast.Leave(channel, s)
+
+		msg := &broadcaster.Msg{
+			Channel: channel,
+			Event:   "disconnect",
+			Data:    map[string]interface{}{},
+			Exclude: s.User,
+		}
+
+		broadcast.Publish(msg)
 	})
 
 	m.HandlePong(func(s *melody.Session) {
