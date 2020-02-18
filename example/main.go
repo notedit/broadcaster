@@ -92,6 +92,10 @@ func main() {
 		broadcast.Leave(channel, s)
 	})
 
+	m.HandlePong(func(s *melody.Session) {
+		fmt.Println("ping response")
+	})
+
 	r.POST("/publish", publishMessage)
 
 	r.Run(":8080")
