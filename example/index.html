@@ -1,0 +1,67 @@
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <title> webrtc test  </title>
+    <style type="text/css">
+        .room {
+            cursor: pointer;
+        }
+        div.select {
+          display: inline-block;
+          margin: 0 0 1em 0;
+        }
+    </style>
+    
+    
+    <script type='text/javascript'>
+    
+        window.localStorage.setItem('debug', '*');
+        const  httpUrl = "http://localhost:8080/publish";
+        const websocketUrl = "ws://localhost:8080/ws?channel=channel1";
+        const  websocket = new WebSocket(websocketUrl);
+
+        websocket.onmessage = function(event) {
+            console.dir(event.data)
+        }
+
+        websocket.onopen = function(event) {
+            console.dir(event)
+        }
+
+
+        async function publish() 
+        {
+            
+            const data = {
+                event: 'test',
+                data: {
+                    "data":"testdata"
+                }
+            }
+
+            let res = await fetch(httpUrl, {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+
+            let ret = await res.json()
+            console.dir(ret)
+        }
+    
+    </script>
+    
+    </head>
+    <body >
+        <h1>Chat Demo</h1>
+        <br/>
+    
+        <div id="conference">
+            <br />
+            <br/>
+    
+            <button onclick="publish()">pullstream</button>
+        </div>
+    </body>
+    
+    
+    </html>

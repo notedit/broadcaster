@@ -56,6 +56,11 @@ func handleMessage() {
 	}
 }
 
+func index(c *gin.Context) {
+	fmt.Println("hello world")
+	c.HTML(200, "index.html", gin.H{})
+}
+
 func main() {
 
 	opt := &broadcaster.Options{}
@@ -115,6 +120,9 @@ func main() {
 	})
 
 	r.POST("/publish", publishMessage)
+
+	r.LoadHTMLFiles("./index.html")
+	r.GET("/", index)
 
 	r.Run(":8080")
 }
